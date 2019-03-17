@@ -168,3 +168,34 @@ public:
         return -1;
     }
 };
+
+
+// Q5
+class Solution {
+public:
+    int smallestDistancePair(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        int low=0;
+        int high=nums.back() - nums[0] + 1;
+        int mid;
+        int i, j, count;
+        int n=nums.size();
+        while (low<high) {
+            mid=low+(high-low)/2;
+            count=0;
+            for (i=0; i<n; i++) {
+                j=i+1;
+                while (j<n && nums[j]-nums[i]<=mid) j++;
+                count+=j-i-1;
+            }
+            
+            if (count<k) {
+                low=mid+1;
+            }
+            else {
+                high=mid;
+            }
+        }
+        return low;
+    }
+};
