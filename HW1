@@ -1,0 +1,170 @@
+// Q1 
+class Solution {
+public:
+    char nextGreatestLetter(vector<char>& letters, char target) {
+        if (letters.back()<=target) return letters.front();
+        int high=letters.size();
+        int low=0;
+        int mid;
+        while (low<high) {
+            mid=low+(high-low)/2;
+            if (letters[mid]<=target) {
+                low=mid+1;
+            } else {
+                high=mid;
+            }
+        }
+        return letters[low];
+    }
+};
+
+// Q2
+class Solution {
+public:
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        int rad=0;
+        int i;
+        int radius1, radius2, radius;
+        sort (heaters.begin(), heaters.end());  
+        for (i=0; i<houses.size(); i++) {
+            if (left(houses[i], heaters)==-1) {
+                radius1=INT_MAX;
+            } else {
+                radius1=houses[i]-left(houses[i], heaters);
+            }
+            if (right(houses[i], heaters)==-1) {
+                radius2=INT_MAX;
+            } else {
+                radius2=right(houses[i], heaters)-houses[i];
+            }
+            
+            radius=min(radius1, radius2);
+            if (radius>rad) rad=radius;
+        }
+        return rad;
+    }
+    
+    
+    
+    int left(int house, vector<int>& heaters) {
+        if (heaters[0]>house) return -1; 
+        int low=0;
+        int high=heaters.size();
+        int mid;
+        while (low<high) {
+            mid=low+(high-low)/2;
+            if (heaters[mid]>house) high=mid;
+            else low=mid+1;
+        }
+        return heaters[low-1];
+    }
+    
+    int right(int house, vector<int>& heaters) {
+        if (heaters[heaters.size()-1]<house) return -1;
+        int low=0;
+        int high=heaters.size();
+        int mid;
+        while (low<high) {
+            mid=low+(high-low)/2;
+            if (heaters[mid]<house) low=mid+1;
+            else high=mid;
+            
+        }
+        return heaters[low];
+    }
+};
+
+// Q3
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        
+        vector<int> result{-1, -1};
+        if (nums.size()==0 || nums[0]>target || nums[nums.size()-1]<target) {
+            return result;
+        }
+        
+        int leftloc=left(nums, target);
+        int rightloc=right(nums, target);
+        
+        if (nums[0]==target && nums[nums.size()-1]==target) {
+            result[0]=0;
+            result[1]=nums.size()-1;
+            return result;
+        }
+        
+        if (nums[0]==target) {
+            result[0]=0;
+            result[1]=rightloc-1;
+            return result;
+        }
+        if (nums[nums.size()-1]==target) {
+            result[0]=leftloc+1;
+            result[1]=nums.size()-1;
+            return result;
+        }
+        if (nums[leftloc+1]!=target || nums[rightloc-1]!=target) {
+            return result;
+        }
+        
+        result[0]=leftloc+1;
+        result[1]=rightloc-1;
+        return result;
+        
+    }
+    
+    int left(vector<int>& nums, int target) {
+        if (nums[0]>=target) return -1;
+        int low=0;
+        int high=nums.size();
+        int mid;
+        while (low<high) {
+            mid=low+(high-low)/2;
+            if (nums[mid]>=target) {
+                high=mid;
+            }
+            else low=mid+1;
+        }
+        return low-1;
+    }
+    int right(vector<int>& nums, int target) {
+        if (nums[nums.size()-1]<=target) return -1;
+        int low=0;
+        int high=nums.size();
+        int mid;
+        while (low<high) {
+            mid=low+(high-low)/2;
+            if (nums[mid]<=target) {
+                low=mid+1;
+            }
+            else high=mid;
+        }
+        return low;
+    
+
+    }
+};
+
+
+// Q4
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        if (nums.size()==0) return -1;
+        int left=0;
+        int right=nums.size();
+        int mid;
+        while (left<right) {
+            mid=left+(right-left)/2;
+            if (mid+1<nums.size() && nums[mid]<nums[mid+1]) {
+                left=mid;
+            } 
+            else if (mid-1>=0 && nums[mid]<nums[mid-1]) {
+                
+                right=mid;
+            }
+            else return mid;
+        }
+        return -1;
+    }
+};
