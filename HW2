@@ -32,3 +32,119 @@ public:
 };
 
 
+// Q2
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        if(M.size() == 0) return 0;
+        int n=M.size();
+        int res=0;
+        for (int i=0; i<n; i++) {
+            for (int j=i; j<n; j++) {
+                if (M[i][j]==1) {
+                    res++;
+                    BFS(M, i, j);
+                }
+            }
+        }
+        return res;
+    }
+    
+    void BFS(vector<vector<int>>& M, int x, int y) {
+        int n=M.size();
+        queue<vector<int>> q;
+        q.push({x, y});
+        M[x][y]=0;
+        while (!q.empty()) {
+            x=q.front()[0];
+            y=q.front()[1];
+            q.pop();
+            for (int j=0; j<n; j++) {
+                if (j==x) {
+                    M[y][j]=0;
+                }
+                else if (M[y][j]==1) {
+                    q.push({y, j});
+                    M[y][j]=0;
+                }
+            }
+        }
+    }
+};
+
+// Q3
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        if (board.size()==0) return;
+        int nrow=board.size();
+        int ncol=board[0].size();
+        queue<vector<int>> q;
+        for (int i=0; i<nrow; i++) {
+            for (int j=0; j<ncol; j++) {
+                if ((i==0 || j==0 || i==nrow-1 || j==ncol-1) && board[i][j]=='O') {
+                    q.push({i, j});
+                }
+            }
+        }
+        int x, y;
+        while (!q.empty()) {
+            x=q.front()[0];
+            y=q.front()[1];
+            q.pop();
+            board[x][y]='T';
+            if (x-1>=0 && board[x-1][y]=='O') q.push({x-1, y});
+            if (x+1<nrow && board[x+1][y]=='O') q.push({x+1, y});
+            if (y-1>=0 && board[x][y-1]=='O') q.push({x, y-1});
+            if (y+1<ncol && board[x][y+1]=='O') q.push({x, y+1});
+        }
+        for (int i=0; i<nrow; i++) {
+            for (int j=0; j<ncol; j++) {
+                if (board[i][j]=='O') {
+                    board[i][j]='X';
+                }
+                if (board[i][j]=='T') {
+                    board[i][j]='O';
+                }
+            }
+        }
+    }
+};
+
+// Q4
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
+        vector<vector<int>> arr1(numCourses);
+        vector<vector<int>> arr2(numCourses);
+        for (auto p: prerequisites) {
+            arr1[p.first].push_back(p.second);
+            arr2[p.second].push_back(p.first);
+        }
+        
+        queue<int> q;
+        for (int i=0; i<numCourses; i++) {
+            if (arr1[i].size()==0) q.push(i);
+        }
+        
+        int count=0;
+        vector<int> res;
+        int course;
+        while (!q.empty()) {
+            course=q.front();
+            count++;
+            res.push_back(course);
+            q.pop();
+            for (int j: arr2[course]) {
+                arr1[j].erase(remove(arr1[j].begin(), arr1[j].end(), course));
+                if (arr1[j].size()==0) q.push(j);
+            }
+        }
+        if (count==numCourses) return res;
+        else return {};
+    }
+};
+
+/*
+myVector.erase(std::remove(myVector.begin(), myVector.end(), 8), myVec.end());
+*/
