@@ -35,3 +35,39 @@ public:
         }
     }
 };
+
+
+// Q2
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        
+        vector<string> res;
+        string temp;
+        int left=0;
+        int right=0;
+        helper (n, temp, res, left, right);
+        
+        return res;
+    }
+    
+    void helper(int n, string temp, vector<string>& res, int left, int right) {
+        if (left<0 || left>n || right<0 || right>n || left-right<0) return;
+        
+        
+        if (left==n && right==n) {
+            if (find(res.begin(), res.end(), temp)==res.end()) {
+                res.push_back(temp);
+            }
+            return ;
+        }
+        
+        if (left<n) {
+            helper(n, temp+'(', res, left+1, right);
+        }
+        
+        if (right<n) {
+            helper(n, temp+')', res, left, right+1);
+        }
+    }
+};
