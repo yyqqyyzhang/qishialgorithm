@@ -1,0 +1,26 @@
+## LeetCode 169
+
+
+
+## LeetCode 231
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if (n<=0) return false;
+        return !(n&(n-1));
+    }
+};
+
+## LeedCode 268
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int num=0;
+        int i=0;
+        for (i; i<nums.size(); i++) {
+            num=num^nums[i]^i;
+        }
+        return num^i;
+    }
+};
+
