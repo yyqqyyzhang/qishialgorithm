@@ -1,8 +1,4 @@
-## LeetCode 169
-
-
-
-## LeetCode 231
+// LeetCode 231
 class Solution {
 public:
     bool isPowerOfTwo(int n) {
@@ -11,7 +7,7 @@ public:
     }
 };
 
-## LeedCode 268
+// LeedCode 268
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
@@ -24,9 +20,21 @@ public:
     }
 };
 
-## LeetCode 342
+// LeetCode 342
 public class Solution {
     public boolean isPowerOfFour(int num) {
         return (num > 0) && ((num & (num - 1)) == 0) && ((num & 0x55555555) == num);
     }
 }
+
+// LeetCode 338
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> result={0};
+        for (int i=1; i<=num; i++) {
+            result.push_back(result[i>>1]+(i&1));
+        }
+        return result;
+    }
+};
