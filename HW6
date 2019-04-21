@@ -1,0 +1,77 @@
+// Leetcode 300
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        if (nums.size()==0) return 0;
+        vector<int> length{1};
+        int max;
+        int result=1;
+        for (int i=1; i<nums.size(); i++) {
+            max=1;
+            for (int j=0; j<i; j++) {
+                if (nums[i]>nums[j] && length[j]+1>max) {
+                    max=length[j]+1;
+                }
+            }
+            length.push_back(max);
+            if (max>result) result=max;
+        }
+        return result;
+    }
+};
+
+// Leetcode 416
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum=0;
+        for (int i=0; i<nums.size(); i++) {
+            sum+=nums[i];
+        }
+        
+        if (sum%2==1) return false;
+        
+        int target=sum/2;
+        int n=nums.size();
+        
+        bool mat[target+1][n+1];
+        for (int i=0; i<=target; i++) {
+            mat[i][0]=false;
+        } 
+        for (int i=0; i<=n; i++) {
+            mat[0][i]=true;
+        }
+        for (int i=1; i<=target; i++) {
+            for (int j=1; j<=n; j++) {
+                if (nums[j-1]>i) {
+                    mat[i][j]=mat[i][j-1];
+                } else {
+                    mat[i][j]=mat[i][j-1] || mat[i-nums[j-1]][j-1];
+                }
+            }
+        }
+        return mat[target][n];
+    }   
+};
+
+// 322
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int n=amount+1;
+        
+        vector<int> num(n, n);
+        num[0]=0;
+        
+        for (int i=1; i<n; i++) {
+            for (int j=0; j<coins.size(); j++) {
+                if (coins[j]<=i) {
+                    num[i]=min(num[i], num[i-coins[j]]+1);
+                }
+            }
+        }
+        
+        if (num[n-1]<=amount) return num[n-1];
+        else return -1;
+    }
+};
