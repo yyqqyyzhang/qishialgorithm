@@ -1,0 +1,37 @@
+// Leetcode 329
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if (matrix.size()==0 || matrix[0].size()==0) return 0;
+        int nrow=matrix.size();
+        int ncol=matrix[0].size();
+        vector<vector<int>> visit(nrow, vector<int>(ncol, 0));
+        int maxleng=1;
+        for (int i=0; i<nrow; i++) {
+            for (int j=0; j<ncol; j++) {
+                maxleng=max(maxleng, dfs(matrix, visit, i, j, nrow, ncol));
+            }
+        }
+        return maxleng;
+    }
+    
+    int dfs(vector<vector<int>> matrix, vector<vector<int>>& visit, int i, int j, int nrow, int ncol) {
+        if (visit[i][j]!=0) return visit[i][j];
+        
+        int dir[4][2]={{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        int length=1;
+        
+        for (auto newdir: dir) {
+            int newrow=i+newdir[0];
+            int newcol=j+newdir[1];
+            
+            if (newrow<0 || newcol<0 || newrow>=nrow || newcol>=ncol || matrix[newrow][newcol]<=matrix[i][j]) continue;
+            
+            length=max(length, 1+dfs(matrix, visit, newrow, newcol, nrow, ncol));
+        }
+        visit[i][j]=length;
+        return length;
+    }
+    
+};
+
